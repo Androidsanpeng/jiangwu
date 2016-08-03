@@ -1,16 +1,21 @@
 package com.sanpeng.ourproject.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.mob.tools.utils.UIHandler;
 import com.sanpeng.ourproject.R;
 
@@ -28,7 +33,16 @@ import cn.sharesdk.tencent.qq.QQ;
  */
 public class MineFragment extends Fragment {
 
-    Button button01,button02;
+    SimpleDraweeView simpleDraweeView;
+    TextView titleTextView;
+
+    // 是否保存帐号信息
+    private boolean isSaveInfo;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    String name;
+    String icon;
 
     Handler handler = new Handler(){
         @Override
@@ -37,19 +51,29 @@ public class MineFragment extends Fragment {
             if (msg.what == 0) {
                 HashMap<String, Object> hashMap = (HashMap<String, Object>) msg.obj;
                 Toast.makeText(getActivity(), "登录成功" + hashMap.toString(), Toast.LENGTH_LONG).show();
-
             }
         }
     };
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //初始化对象
+        ShareSDK.initSDK(getActivity());
+        Fresco.initialize(getActivity());
+
+        sharedPreferences = getContext().getSharedPreferences("app_config", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_mine_fragment,container,false);
 
-        //初始化对象
-        ShareSDK.initSDK(getActivity());
-        button01 = (Button) rootView.findViewById(R.id.login);
-        button01.setOnClickListener(new View.OnClickListener() {
+        simpleDraweeView = (SimpleDraweeView) rootView.findViewById(R.id.mine_sdv);
+        titleTextView = (TextView) rootView.findViewById(R.id.mine_title_tv);
+
+        simpleDraweeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(QQ.NAME);
@@ -57,14 +81,22 @@ public class MineFragment extends Fragment {
             }
         });
 
-        button02 = (Button) rootView.findViewById(R.id.share);
-        button02.setOnClickListener(new View.OnClickListener() {
+        titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showShare();
             }
         });
 
+        // 如果上一次保存帐号信息，则下一次读取信息
+        isSaveInfo = sharedPreferences.getBoolean("isSaveInfo", false);
+        if (isSaveInfo) {
+            name = sharedPreferences.getString("name", "");
+            icon = sharedPreferences.getString("icon", "");
+
+            simpleDraweeView.setImageURI(icon);
+            titleTextView.setText(name);
+        }
 
         return rootView;
     }
@@ -75,7 +107,6 @@ public class MineFragment extends Fragment {
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
 
-// 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
         //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
         oks.setTitle(getString(R.string.ssdk_oks_multi_share));
@@ -133,10 +164,25 @@ public class MineFragment extends Fragment {
                             }else if (platform.getName().equals(SinaWeibo.NAME)){
                                 HashMap<String, Object> hashMap1 = (HashMap<String, Object>) msg.obj;
                             }
-                            String name = platform.getDb().getUserName();
-                            String icon = platform.getDb().getUserIcon();
-                            Log.e("====", "==name==" + name);
-                            Log.e("====", "==icon==" + icon);
+                            final String name = platform.getDb().getUserName();
+                            final String icon = platform.getDb().getUserIcon();
+//                            Log.e("====", "==name==" + name);
+//                            Log.e("====", "==icon==" + icon);
+                            if (isSaveInfo) {
+                                editor.putString("name", name);
+                                editor.putString("icon", icon);
+                                editor.commit();
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    simpleDraweeView.setImageURI(icon);
+                                    titleTextView.setText(name);
+                                    isSaveInfo = true;
+                                    editor.putBoolean("isSaveInfo", isSaveInfo);
+                                    editor.commit();
+                                }
+                            });
                             Toast.makeText(getActivity(), "登录成功", Toast.LENGTH_LONG).show();
                         }
                         return false;

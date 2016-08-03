@@ -14,19 +14,19 @@
             android:id="@+id/home_rb"
             style="@style/main_rg"
             android:checked="true"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@drawable/radio_group_product"
             android:text="匠铺" />
 
         <RadioButton
             android:id="@+id/zone_rb"
             style="@style/main_rg"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@drawable/radio_group_space"
             android:text="空间" />
 
         <RadioButton
             android:id="@+id/mine_rb"
             style="@style/main_rg"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@drawable/radio_group_mine"
             android:text="我的" />
 
     </RadioGroup>
