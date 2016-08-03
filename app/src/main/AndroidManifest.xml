@@ -3,6 +3,11 @@
     package="com.sanpeng.ourproject">
 
     <!-- 15ad99cb04421 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -77,6 +82,9 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.MainActivity"></activity>
+
+        <activity android:name="com.zxing.activity.CaptureActivity"></activity>
+
     </application>
 
 </manifest>

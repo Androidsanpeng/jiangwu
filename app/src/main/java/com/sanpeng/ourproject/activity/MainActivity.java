@@ -1,5 +1,6 @@
 package com.sanpeng.ourproject.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.sanpeng.ourproject.R;
 import com.sanpeng.ourproject.fragment.HomeFragment;
 import com.sanpeng.ourproject.fragment.MineFragment;
 import com.sanpeng.ourproject.fragment.ZoneFragment;
+import com.zxing.activity.CaptureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
                         switch (item.getItemId()){
                             case R.id.scan:
                                 // 点击微信扫码图片执行的操作
-                                Toast.makeText(MainActivity.this, "微信扫一扫", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+                                startActivityForResult(intent, 100);
+//                                Toast.makeText(MainActivity.this, "微信扫一扫", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                         return false;
