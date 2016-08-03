@@ -1,6 +1,7 @@
 package com.sanpeng.ourproject.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mob.tools.utils.UIHandler;
 import com.sanpeng.ourproject.R;
+import com.sanpeng.ourproject.activity.SettingActivity;
 
 import java.util.HashMap;
 
@@ -34,13 +36,15 @@ import cn.sharesdk.tencent.qq.QQ;
 public class MineFragment extends Fragment {
 
     SimpleDraweeView simpleDraweeView;
-    TextView titleTextView;
+    TextView titleTextView,setTextView,unregisterTextView;
+//    Toolbar toolbar;
 
     // 是否保存帐号信息
     private boolean isSaveInfo;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    boolean tag;
     String name;
     String icon;
 
@@ -54,6 +58,7 @@ public class MineFragment extends Fragment {
             }
         }
     };
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,28 +75,66 @@ public class MineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_mine_fragment,container,false);
 
+//        toolbar = (Toolbar) rootView.findViewById(R.id.mine_toolbar);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                switch (item.getItemId()){
+//                    case R.id.mine_set:
+//                        Intent intent = new Intent(getActivity(), SettingActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+        unregisterTextView = (TextView) rootView.findViewById(R.id.mine_unregister_tv);
+        unregisterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titleTextView.setText("未登录");
+                simpleDraweeView.setImageURI("");
+                if (tag){
+                    Toast.makeText(getActivity(), "注销登录成功", Toast.LENGTH_SHORT).show();
+                }
+                isSaveInfo = false;
+                tag = false;
+                editor.putBoolean("isSaveInfo", isSaveInfo);
+                editor.putBoolean("tag", tag);
+                editor.commit();
+            }
+        });
+
+        setTextView = (TextView) rootView.findViewById(R.id.mine_set_tv);
+        setTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
         simpleDraweeView = (SimpleDraweeView) rootView.findViewById(R.id.mine_sdv);
         titleTextView = (TextView) rootView.findViewById(R.id.mine_title_tv);
-
         simpleDraweeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(QQ.NAME);
-
             }
         });
 
         titleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShare();
+//                showShare();
             }
         });
 
         // 如果上一次保存帐号信息，则下一次读取信息
         isSaveInfo = sharedPreferences.getBoolean("isSaveInfo", false);
+        tag = sharedPreferences.getBoolean("tag",false);
         if (isSaveInfo) {
-            name = sharedPreferences.getString("name", "");
+            name = sharedPreferences.getString("name", "未登录");
             icon = sharedPreferences.getString("icon", "");
 
             simpleDraweeView.setImageURI(icon);
@@ -100,6 +143,7 @@ public class MineFragment extends Fragment {
 
         return rootView;
     }
+
 
     private void showShare() {
         ShareSDK.initSDK(getActivity());
@@ -168,6 +212,8 @@ public class MineFragment extends Fragment {
                             final String icon = platform.getDb().getUserIcon();
 //                            Log.e("====", "==name==" + name);
 //                            Log.e("====", "==icon==" + icon);
+                            isSaveInfo = true;
+                            tag = true;
                             if (isSaveInfo) {
                                 editor.putString("name", name);
                                 editor.putString("icon", icon);
@@ -178,8 +224,8 @@ public class MineFragment extends Fragment {
                                 public void run() {
                                     simpleDraweeView.setImageURI(icon);
                                     titleTextView.setText(name);
-                                    isSaveInfo = true;
                                     editor.putBoolean("isSaveInfo", isSaveInfo);
+                                    editor.putBoolean("tag", tag);
                                     editor.commit();
                                 }
                             });
