@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sanpeng.ourproject.R;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     MineFragment mineFragment;
     Toolbar toolbar;
     RadioGroup radioGroup;
+    TextView toolbarTextView;
 
     // 定义一个变量，来标识是否退出
     private static boolean isExit = false;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbarTextView = (TextView) findViewById(R.id.toolbar_text_view);
 
         radioGroup = (RadioGroup) findViewById(R.id.main_radio_group);
 
@@ -83,20 +87,20 @@ public class MainActivity extends AppCompatActivity {
                 FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
                 switch (checkedId) {
                     case R.id.home_rb:
-                        toolbar.setTitle("匠铺");
+                        toolbarTextView.setText("匠铺");
                         ft.show(homeFragment).hide(zoneFragment).hide(mineFragment);
                         break;
                     case R.id.zone_rb:
-                        toolbar.setTitle("空间");
+                        toolbarTextView.setText("空间");
                         ft.show(zoneFragment).hide(homeFragment).hide(mineFragment);
                         break;
                     case R.id.mine_rb:
-                        toolbar.setTitle("我的");
+                        toolbarTextView.setText("我的");
                         ft.show(mineFragment).hide(homeFragment).hide(zoneFragment);
                         break;
                 }
                 ft.commit();
-                toolbar.setTitleTextColor(Color.WHITE);
+//                toolbar.setTitleTextColor(Color.WHITE);
                 setSupportActionBar(toolbar);
                 toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override

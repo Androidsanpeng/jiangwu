@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.mob.tools.utils.UIHandler;
@@ -28,19 +28,7 @@ import cn.sharesdk.tencent.qq.QQ;
  */
 public class MineFragment extends Fragment {
 
-    TextView textView;
-
-//    Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            if (msg.what == 0) {
-//                HashMap<String, Object> hashMap = (HashMap<String, Object>) msg.obj;
-//                Toast.makeText(getActivity(), "登录成功" + hashMap.toString(), Toast.LENGTH_LONG).show();
-//
-//            }
-//        }
-//    };
+    Button button01,button02;
 
     Handler handler = new Handler(){
         @Override
@@ -58,17 +46,25 @@ public class MineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.layout_mine_fragment,container,false);
 
-
         //初始化对象
         ShareSDK.initSDK(getActivity());
-        textView = (TextView) rootView.findViewById(R.id.login);
-        textView.setOnClickListener(new View.OnClickListener() {
+        button01 = (Button) rootView.findViewById(R.id.login);
+        button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login(QQ.NAME);
 
             }
         });
+
+        button02 = (Button) rootView.findViewById(R.id.share);
+        button02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShare();
+            }
+        });
+
 
         return rootView;
     }
