@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                                 // 点击微信扫码图片执行的操作
                                 Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
                                 startActivityForResult(intent, 100);
-//                                Toast.makeText(MainActivity.this, "微信扫一扫", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                         return false;
