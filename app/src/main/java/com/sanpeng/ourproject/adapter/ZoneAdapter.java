@@ -31,8 +31,8 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.MyViewHolder> 
         this.headerView = view;
     }
 
-    public void setmOnItemClickListener(onItemClickListener mOnItemClickListener) {
-        this.mOnItemClickListener = mOnItemClickListener;
+    public void setmOnItemClickListener(onItemClickListener itemClickListener) {
+        this.mOnItemClickListener = itemClickListener;
     }
 
     public void setSpacesBeens(List<ZoneData.SpacesBean> spacesBeens1,int type) {

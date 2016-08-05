@@ -18,6 +18,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.sanpeng.ourproject.R;
 import com.sanpeng.ourproject.activity.DescribeActivity;
+import com.sanpeng.ourproject.activity.ZoneDetailActivity;
 import com.sanpeng.ourproject.adapter.ZoneAdapter;
 import com.sanpeng.ourproject.beans.ZoneData;
 import com.sanpeng.ourproject.callbacks.MyZoneInterface;
@@ -66,7 +67,6 @@ public class ZoneFragment extends Fragment {
         pullToRefreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-//                page++;
                 downLoadData(page,0);
                 showAnim(cloudImageView);
             }
@@ -120,11 +120,13 @@ public class ZoneFragment extends Fragment {
                 adapter.setmOnItemClickListener(new ZoneAdapter.onItemClickListener() {
                     @Override
                     public void onItemClickListener(int pos) {
-//                        Intent intent = new Intent(getActivity(), ZoneDetailActivity.class);
-//                        int id = spacesBeens.get(pos).getId();
-//                        intent.putExtra("id", id);
-//                        intent.putExtra("pos",pos);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), ZoneDetailActivity.class);
+                        int id = spacesBeens.get(pos).getId();
+                        String ids = Integer.toString(id);
+                        String poss = Integer.toString(pos);
+                        intent.putExtra("id", ids);
+                        intent.putExtra("pos",poss);
+                        startActivity(intent);
 //                        Log.e("========","========="+pos);
                     }
                 });

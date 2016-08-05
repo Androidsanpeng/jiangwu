@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.sanpeng.ourproject.activity.ZoneDetailActivity">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hhhhhhhhhhhhhhhhhhhhh"/>
+
+
 
 </RelativeLayout>
