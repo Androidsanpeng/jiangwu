@@ -45,7 +45,6 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.MyViewHolder> 
         notifyDataSetChanged();
     }
 
-
     public ZoneAdapter(Context context) {
         this.context = context;
         Fresco.initialize(context);
@@ -73,7 +72,7 @@ public class ZoneAdapter extends RecyclerView.Adapter<ZoneAdapter.MyViewHolder> 
                 break;
             case TYPE_ITEM:
                 holder.titleTextView.setText(spacesBeens.get(position-1).getName());
-                Glide.with(context).load(spacesBeens.get(position-1)
+                Glide.with(context).load("http://"+spacesBeens.get(position-1)
                         .getThumb())
                         .placeholder(R.drawable.bg_default_rectangle)
                         .into(holder.imageView);
